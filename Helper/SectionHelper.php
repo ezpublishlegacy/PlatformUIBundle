@@ -120,4 +120,26 @@ class SectionHelper implements SectionHelperInterface
 
         return $this->sectionService->updateSection( $sectionToUpdate, $sectionUpdateStruct );
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function deleteSectionList( $sectionIdList )
+    {
+        foreach ( $sectionIdList as $sectionId )
+        {
+            $this->deleteSection( $sectionId );
+        }
+    }
+
+    /**
+     * Removes the section having a given section id
+     *
+     * @param mixed $sectionId to be deleted
+     */
+    private function deleteSection( $sectionId )
+    {
+        $section = $this->sectionService->loadSection( $sectionId );
+        $this->sectionService->deleteSection( $section );
+    }
 }

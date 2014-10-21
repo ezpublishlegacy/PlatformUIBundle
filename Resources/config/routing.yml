@@ -33,7 +33,7 @@ admin_sectionlist:
     path: /pjax/section/list
     defaults:
         _controller: ezsystems.platformui.controller.section:listAction
-    methods: [GET]
+#TODO    methods: [GET]
 
 admin_sectionview:
     path: /pjax/section/view/{sectionId}

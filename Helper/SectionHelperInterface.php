@@ -82,4 +82,7 @@ interface SectionHelperInterface
      */
     public function updateSection( Section $sectionToUpdate, SectionEntity $section );
 
+    //TODO comment
+    public function deleteSectionList( $sectionIds );
+
 }

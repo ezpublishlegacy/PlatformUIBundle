@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use EzSystems\PlatformUIBundle\Entity\Section;
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use EzSystems\PlatformUIBundle\Entity\SectionList;
 use EzSystems\PlatformUIBundle\Form\Type\SectionType;
 use Symfony\Component\HttpFoundation\Request;
 use EzSystems\PlatformUIBundle\Helper\SectionHelperInterface;
@@ -58,17 +59,49 @@ class SectionController extends Controller
     /**
      * Renders the section list
      *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listAction()
+    public function listAction( Request $request)
     {
         try
         {
+            //TODO build a form (inside or outside try ?)
+            $sectionListToDelete = new SectionList(); //TODO rename to sectiontodelete
+
+            $sectionList = $this->sectionHelper->getSectionList();
+
+            //TODO delete action
+
+            $form = $this->createFormBuilder( $sectionListToDelete )
+                ->add(
+                    'identifiers', //TODO rename
+                    'choice',
+                    array(
+                        'choices' => array( $sectionList ),
+                        'multiple' => true,
+                        'expanded' => true
+                    )
+                )
+                ->add( 'delete', 'submit' ) //TODO translation section.remove.selected
+                ->setAction( $this->generateUrl( 'admin_sectionlist' ) )
+                ->getForm();
+
+            $form->handleRequest( $request );
+
+            if ( $form->isValid() )
+            {
+                $toto = "coucou";
+                //FIXME $this->sectionHelper->deleteSectionList( $sectionListToDelete->identifiers );
+            }
+
             return $this->render(
                 'eZPlatformUIBundle:Section:list.html.twig',
                 array(
-                    'sectionInfoList' => $this->sectionHelper->getSectionList(),
+                    'sectionInfoList' => $sectionList,
                     'canCreate' => $this->sectionHelper->canCreate(),
+                    'form' => $form->createView()
                 )
             );
         }
